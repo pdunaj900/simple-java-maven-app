@@ -3,21 +3,7 @@ pipeline {
     tools {
         maven '3.9.8'
     }
-    environment {
-        GITHUB_TOKEN = credentials('github_token_id') // Upewnij się, że 'github_token_id' to prawidłowy identyfikator poświadczeń w Jenkins
-    }
     stages {
-        stage('Check API Rate Limit') { // Dodanie etapu dla skryptu
-            steps {
-                script {
-                    def response = httpRequest(
-                        url: 'https://api.github.com/rate_limit',
-                        customHeaders: [[name: 'Authorization', value: "token ${env.GITHUB_TOKEN}"]]
-                    )
-                    echo "Status limitu API GitHub: ${response.content}"
-                }
-            }
-        }
         stage('Build') {
             steps {
                 sh 'mvn -B -DskipTests clean package'
